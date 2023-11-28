@@ -1,6 +1,6 @@
 using Command.Player;
 
-namespace Command.Abstract
+namespace Command.AbstractCommands
 {
     public abstract class UnitCommand : ICommand
     {
