@@ -1,7 +1,7 @@
-using Command.Main;
 using System.Collections.Generic;
+using Command.Abstract;
 
-namespace Command.Commands
+namespace Command
 {
     public class CommandInvoker
     {
