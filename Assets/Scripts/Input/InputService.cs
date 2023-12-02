@@ -1,6 +1,7 @@
 using Command.Main;
 using Command.Player;
 using Command.Actions;
+using Command.Abstract;
 
 namespace Command.Input
 {
@@ -9,7 +10,7 @@ namespace Command.Input
         private MouseInputHandler mouseInputHandler;
 
         private InputState currentState;
-        private CommandType selectedActionType;
+        private CommandType selectedCommandType;
         private TargetType targetType;
 
         public InputService()
@@ -31,7 +32,7 @@ namespace Command.Input
 
         public void OnActionSelected(CommandType selectedActionType)
         {
-            this.selectedActionType = selectedActionType;
+            this.selectedCommandType = selectedActionType;
             SetInputState(InputState.SELECTING_TARGET);
             TargetType targetType = SetTargetType(selectedActionType);
             ShowTargetSelectionUI(targetType);
@@ -48,7 +49,35 @@ namespace Command.Input
         public void OnTargetSelected(UnitController targetUnit)
         {
             SetInputState(InputState.EXECUTING_INPUT);
-            GameService.Instance.PlayerService.PerformAction(selectedActionType, targetUnit);
+
+            UnitCommand commandToProcess = CreateUnitCommand(targetUnit);
+
+            GameService.Instance.ProcessUnitCommand(commandToProcess);
+        }
+
+        private CommandData CreateCommandData(UnitController unitController)
+        {
+            return new CommandData(
+                GameService.Instance.PlayerService.ActiveUnitID,
+                unitController.UnitID,
+                GameService.Instance.PlayerService.ActivePlayerID,
+                unitController.Owner.PlayerID
+            );
+        }
+
+        private UnitCommand CreateUnitCommand(UnitController unitController) {
+            CommandData commandData = CreateCommandData(unitController);
+
+            return this.selectedCommandType switch { 
+                CommandType.Attack => new AttackCommand(commandData), 
+                CommandType.Heal => new HealCommand(commandData),
+                CommandType.AttackStance => new AttackStanceCommand(commandData),
+                CommandType.Cleanse => new CleanseCommand(commandData),
+                CommandType.BerserkAttack => new BerserkAttackCommand(commandData),
+                CommandType.Meditate => new MeditateCommand(commandData),
+                CommandType.ThirdEye => new ThirdEyeCommand(commandData),
+                _ => throw new System.Exception($"No Command found of type: {this.selectedCommandType}")
+            };
         }
     }
 }
