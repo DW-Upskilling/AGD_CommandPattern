@@ -8,6 +8,7 @@ using Command.UI;
 using Command.Events;
 using Command.Battle;
 using Command.Actions;
+using Command.Abstract;
 
 namespace Command.Main
 {
@@ -53,5 +54,7 @@ namespace Command.Main
         }
 
         private void Update() => InputService.UpdateInputService();
+
+        public void ProcessUnitCommand(ICommand commandToProcess) => PlayerService.ProcessUnitCommand(commandToProcess as UnitCommand);
     }
 }
