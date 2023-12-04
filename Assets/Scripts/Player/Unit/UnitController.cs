@@ -17,7 +17,7 @@ namespace Command.Player
         public UnitType UnitType => unitScriptableObject.UnitType;
         public int CurrentHealth { get; private set; }
         public UnitUsedState UsedState { get; private set; }
-        
+
         private UnitAliveState aliveState;
         private Vector3 originalPosition;
         public int CurrentPower;
@@ -76,7 +76,7 @@ namespace Command.Player
             else
                 unitView.PlayAnimation(UnitAnimations.HIT);
 
-            unitView.UpdateHealthBar((float) CurrentHealth / CurrentMaxHealth);
+            unitView.UpdateHealthBar((float)CurrentHealth / CurrentMaxHealth);
         }
 
         public void RestoreHealth(int healthToRestore)
@@ -97,7 +97,7 @@ namespace Command.Player
             MoveToBattlePosition(battlePosition, callback, true, commandType);
         }
 
-        private void MoveToBattlePosition(Vector3 battlePosition, Action callback = null,  bool shouldPlayActionAnimation = true, CommandType commandTypeToExecute = CommandType.None)
+        private void MoveToBattlePosition(Vector3 battlePosition, Action callback = null, bool shouldPlayActionAnimation = true, CommandType commandTypeToExecute = CommandType.None)
         {
             float moveTime = Vector3.Distance(unitView.transform.position, battlePosition) / unitScriptableObject.MovementSpeed;
             unitView.StartCoroutine(MoveToPositionOverTime(battlePosition, moveTime, callback, shouldPlayActionAnimation, commandTypeToExecute));
@@ -128,7 +128,7 @@ namespace Command.Player
         {
             if (actionType == CommandType.None)
                 return;
-            
+
             if (actionType == unitScriptableObject.executableCommands[0])
                 unitView.PlayAnimation(UnitAnimations.ACTION1);
             else if (actionType == unitScriptableObject.executableCommands[1])
@@ -147,7 +147,11 @@ namespace Command.Player
 
         public void ResetStats() => CurrentPower = unitScriptableObject.Power;
 
-        public void Revive() => SetAliveState(UnitAliveState.ALIVE);
+        public void Revive()
+        {
+            SetAliveState(UnitAliveState.ALIVE);
+            unitView.PlayAnimation(UnitAnimations.IDLE);
+        }
 
         public void Destroy() => UnityEngine.Object.Destroy(unitView.gameObject);
 
