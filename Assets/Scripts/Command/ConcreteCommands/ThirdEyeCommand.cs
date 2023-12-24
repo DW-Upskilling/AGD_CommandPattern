@@ -24,6 +24,7 @@ namespace Command.Commands
                 targetUnit.RestoreHealth(healthConverted);
                 targetUnit.CurrentPower -= healthConverted;
             }
+            actorUnit.Owner.ResetCurrentActiveUnit();
         }
     } 
 }

@@ -19,10 +19,9 @@ namespace Command.Commands
         public override void Undo()
         {
             if (willHitTarget)
-            {
                 targetUnit.TakeDamage(actorUnit.CurrentPower);
-                actorUnit.Owner.ResetCurrentActiveUnit();
-            }
+
+            actorUnit.Owner.ResetCurrentActiveUnit();
         }
     }
 }

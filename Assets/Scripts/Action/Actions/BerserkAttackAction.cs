@@ -33,7 +33,6 @@ namespace Command.Actions
             {
                 actorUnit.TakeDamage(actorUnit.CurrentPower * 2);
                 actorUnit.OnActionExecuted();
-                Debug.Log("actor unit must be hit now.");
             }
         }
 

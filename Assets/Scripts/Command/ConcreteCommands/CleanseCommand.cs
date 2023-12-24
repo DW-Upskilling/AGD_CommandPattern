@@ -7,6 +7,7 @@ namespace Command.Commands
     {
         private bool willHitTarget;
         private const float hitChance = 0.2f;
+        private int buffer;
 
         public CleanseCommand(CommandData commandData)
         {
@@ -14,16 +15,21 @@ namespace Command.Commands
             willHitTarget = WillHitTarget();
         }
 
-        public override void Execute() => GameService.Instance.ActionService.GetActionByType(CommandType.Cleanse).PerformAction(actorUnit, targetUnit, willHitTarget);
+        public override void Execute()
+        {
+            buffer = targetUnit.CurrentPower;
+
+            GameService.Instance.ActionService.GetActionByType(CommandType.Cleanse).PerformAction(actorUnit, targetUnit, willHitTarget);
+        }
 
         public override bool WillHitTarget() => Random.Range(0f, 1f) < hitChance;
 
         public override void Undo()
         {
             if (willHitTarget)
-            {
-                // TO-DO
-            }
+                targetUnit.CurrentPower = buffer;
+            
+            actorUnit.Owner.ResetCurrentActiveUnit();
         }
     }
 }

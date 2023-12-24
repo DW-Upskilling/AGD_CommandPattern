@@ -25,6 +25,7 @@ namespace Command.Commands
                 targetUnit.TakeDamage(healthToDecrease);
                 targetUnit.CurrentMaxHealth -= healthToDecrease;
             }
+            actorUnit.Owner.ResetCurrentActiveUnit();
         }
     }
 }

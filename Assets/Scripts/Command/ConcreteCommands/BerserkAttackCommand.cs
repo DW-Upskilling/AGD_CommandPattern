@@ -26,8 +26,16 @@ namespace Command.Commands
                     targetUnit.Revive();
 
                 targetUnit.RestoreHealth(actorUnit.CurrentPower * 2);
-                actorUnit.Owner.ResetCurrentActiveUnit();
             }
+            else
+            {
+                if (!actorUnit.IsAlive())
+                    actorUnit.Revive();
+
+                actorUnit.RestoreHealth(actorUnit.CurrentPower * 2);
+            }
+
+            actorUnit.Owner.ResetCurrentActiveUnit();
         }
     }
 }
