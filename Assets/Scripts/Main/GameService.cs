@@ -44,9 +44,6 @@ namespace Command.Main
         [SerializeField] private AudioSource sfxSource;
         [SerializeField] private AudioSource bgMusicSource;
 
-        private float MAX_COOLDOWN;
-        private float CURRENT_COOLDOWN;
-
         private void Start()
         {
             SoundService = new SoundService(soundScriptableObject, sfxSource, bgMusicSource);
@@ -58,22 +55,11 @@ namespace Command.Main
             uiService.Init(battleScriptableObjects.Count);
             CommandInvoker = new CommandInvoker();
             ReplayService = new ReplayService();
-
-            MAX_COOLDOWN = 1f;
         }
 
         private void Update()
         {
-            CURRENT_COOLDOWN -= Time.deltaTime;
-
-            if (ReplayService.ReplayState == ReplayState.ACTIVE) { 
-                if(CURRENT_COOLDOWN < 0)
-                {
-                    ReplayService.ExecuteNext();
-                    CURRENT_COOLDOWN = MAX_COOLDOWN;
-                }    
-            }
-            else InputService.UpdateInputService();
+            InputService.UpdateInputService();
         }
 
         public void ProcessUnitCommand(ICommand commandToProcess) => PlayerService.ProcessUnitCommand(commandToProcess as UnitCommand);
